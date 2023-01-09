@@ -1,14 +1,15 @@
-use super::command_prelude::*;
 #[cfg(feature = "watch")]
 use super::watch;
-use crate::{get_book_dir, open};
+use super::{command_prelude::*, get_book_dir, open};
+use crate::{
+    errors::*,
+    utils::{self, fs::get_404_output_file},
+    MDBook,
+};
 use clap::builder::NonEmptyStringValueParser;
 use futures_util::sink::SinkExt;
 use futures_util::StreamExt;
-use mdbook::errors::*;
-use mdbook::utils;
-use mdbook::utils::fs::get_404_output_file;
-use mdbook::MDBook;
+use log::{error, info, trace};
 use std::net::{SocketAddr, ToSocketAddrs};
 use std::path::PathBuf;
 use tokio::sync::broadcast;

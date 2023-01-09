@@ -1,8 +1,7 @@
-use crate::get_book_dir;
+use super::get_book_dir;
+use crate::{config, errors::Result, MDBook};
 use clap::{arg, ArgMatches, Command as ClapCommand};
-use mdbook::config;
-use mdbook::errors::Result;
-use mdbook::MDBook;
+use log::debug;
 use std::io;
 use std::io::Write;
 use std::process::Command;

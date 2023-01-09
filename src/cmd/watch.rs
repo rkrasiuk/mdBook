@@ -1,8 +1,7 @@
-use super::command_prelude::*;
-use crate::{get_book_dir, open};
-use mdbook::errors::Result;
-use mdbook::utils;
-use mdbook::MDBook;
+use log::{error, info, warn};
+
+use super::{command_prelude::*, get_book_dir, open};
+use crate::{errors::Result, utils, MDBook};
 use std::path::{Path, PathBuf};
 use std::sync::mpsc::channel;
 use std::thread::sleep;
@@ -85,7 +84,7 @@ fn find_gitignore(book_root: &Path) -> Option<PathBuf> {
         .find(|p| p.exists())
 }
 
-fn filter_ignored_files(exclusion_checker: gitignore::File, paths: &[PathBuf]) -> Vec<PathBuf> {
+fn filter_ignored_files(exclusion_checker: gitignore::File<'_>, paths: &[PathBuf]) -> Vec<PathBuf> {
     paths
         .iter()
         .filter(|path| match exclusion_checker.is_excluded(path) {

@@ -1,21 +1,16 @@
 #[macro_use]
 extern crate clap;
-#[macro_use]
-extern crate log;
 
 use anyhow::anyhow;
 use chrono::Local;
-use clap::{Arg, ArgMatches, Command};
+use clap::{Arg, Command};
 use clap_complete::Shell;
 use env_logger::Builder;
 use log::LevelFilter;
+use mdbook::cmd;
 use mdbook::utils;
 use std::env;
-use std::ffi::OsStr;
 use std::io::Write;
-use std::path::PathBuf;
-
-mod cmd;
 
 const VERSION: &str = concat!("v", crate_version!());
 
@@ -118,26 +113,6 @@ fn init_logger() {
     }
 
     builder.init();
-}
-
-fn get_book_dir(args: &ArgMatches) -> PathBuf {
-    if let Some(p) = args.get_one::<PathBuf>("dir") {
-        // Check if path is relative from current dir, or absolute...
-        if p.is_relative() {
-            env::current_dir().unwrap().join(p)
-        } else {
-            p.to_path_buf()
-        }
-    } else {
-        env::current_dir().expect("Unable to determine the current directory")
-    }
-}
-
-fn open<P: AsRef<OsStr>>(path: P) {
-    info!("Opening web browser");
-    if let Err(e) = opener::open(path) {
-        error!("Error opening web browser: {}", e);
-    }
 }
 
 #[test]
